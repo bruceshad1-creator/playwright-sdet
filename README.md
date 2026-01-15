@@ -100,4 +100,5 @@ To get pkl into yml file run:
 
 Congratulations! You should now have a local development environment set up and be ready.
 
-Happy coding!
+
+Happy coding 😊:)
