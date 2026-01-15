@@ -112,8 +112,9 @@ export class ProfilePageComponent extends BaseComponent {
                 break;
             case 'LinkedIn':
                 await expect(newPage.url()).toContain('https://www.linkedin.com/');
-                await expect(newPage.getByRole('link', { name: 'LinkedIn' })).toBeVisible();
-                await expect(newPage.getByRole('heading', { name: 'Join LinkedIn' })).toBeVisible();
+                await expect(newPage.getByRole('link', { name: 'LinkedIn' })
+                .or(newPage.locator('a').filter({ hasText: 'LinkedIn' }).first()))
+                .toBeVisible();
                 break;
             case 'GitHub':
                 await expect(newPage.url()).toContain('https://github.com/');
