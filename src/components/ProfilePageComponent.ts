@@ -47,13 +47,14 @@ export class ProfilePageComponent extends BaseComponent {
         const texts: string[] = [
             'Senior Software Development Engineer in Test (SDET)',
             'bruceshad1@gmail.com',
+            'Cellphone (415) 845 - 9033',
             '©2026 Bruce Shad'
         ];
         for (const text of texts)
             await expect(await this.page.getByText(text).first()).toBeVisible();
     }
 
-    private async verifyPageLinksVisibility(): Promise<void> {
+    private async verifyPageLinksVisibility(count = 7): Promise<void> {
         const links: string[] = [
            'Résumé',
            'Playwright_UI',
@@ -64,7 +65,7 @@ export class ProfilePageComponent extends BaseComponent {
         ];
         for (const link of links)
            await expect(await this.page.getByRole('link', { name: link })).toBeVisible();
-        await expect(this.page.getByText('👉 ')).toHaveCount(6);
+        await expect(this.page.getByText('👉 ')).toHaveCount(count);
     }
 
     public async verifyDownloadedPDF(): Promise<void> {
