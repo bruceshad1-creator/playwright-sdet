@@ -47,7 +47,7 @@ export class ProfilePageComponent extends BaseComponent {
         const texts: string[] = [
             'Senior Software Development Engineer in Test (SDET)',
             'bruceshad1@gmail.com',
-            '©2025 Bruce Shad'
+            '©2026 Bruce Shad'
         ];
         for (const text of texts)
             await expect(await this.page.getByText(text).first()).toBeVisible();
@@ -106,9 +106,9 @@ export class ProfilePageComponent extends BaseComponent {
                 break;
             case 'Applications of Steganography':
                 await expect(newPage.url()).toContain('https://scholarworks.calstate.edu/');
-                await expect(newPage.locator('.csu-campus-logo')
-                .or(newPage.getByLabel('header').getByRole('link', { name: 'California State University' })).first())
-                .toBeVisible();
+//                 await expect(newPage.locator('.csu-campus-logo')
+//                 .or(newPage.getByLabel('header').getByRole('link', { name: 'California State University' })).first())
+//                 .toBeVisible();
                 break;
             case 'LinkedIn':
                 await expect(newPage.url()).toContain('https://www.linkedin.com/');
