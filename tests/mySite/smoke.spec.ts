@@ -1,6 +1,6 @@
 import { test } from '@page-manager-fixture';
 
-test('Test 1: Smoke - Verify visibility of About Me section', async ({ pageManager }, testInfo) => {
+test('@smoke 1: Verify visibility of About Me section', async ({ pageManager }, testInfo) => {
     const { profilePage } = pageManager;
     const browserName = testInfo.project.use.browserName;
     console.log(`[${browserName}] > ${testInfo.title}`);
