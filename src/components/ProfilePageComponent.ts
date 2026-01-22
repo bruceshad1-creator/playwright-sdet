@@ -25,9 +25,16 @@ export class ProfilePageComponent extends BaseComponent {
         this.aboutMeSection = this.page.locator('div').filter({ hasText: 'Senior Software Engineer (SDET)' });
     }
 
-    public async verifyPageVisibility(): Promise<void> {
-        await this.verifyPageHeadersVisibility();
-        await this.verifyPageLinksVisibility();
+    public async verifyPageVisibility(smoke: boolean = false): Promise<void> {
+        if (smoke) {
+            await expect(await this.logo).toBeVisible();
+            await expect(await this.aboutMeSection).toBeVisible();
+            await expect(await this.page.getByText('©2026 Bruce Shad').first()).toBeVisible();
+        }
+        else {
+            await this.verifyPageHeadersVisibility();
+            await this.verifyPageLinksVisibility();
+        }
     }
 
     private async verifyPageHeadersVisibility(): Promise<void> {
