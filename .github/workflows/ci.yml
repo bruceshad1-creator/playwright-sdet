@@ -14,7 +14,6 @@ permissions:
 jobs:
   test:
     name: regression-test
-    needs: smoke-test
     timeout-minutes: 60
     runs-on: ubuntu-latest
 
