@@ -11,7 +11,7 @@ test('Test 1: Verify visibility of basic elements', async ({ pageManager }, test
     });
 
     await test.step('Step 2: Verify visibility of basic elements', async () => {
-        await profilePage.profilePageComponent.verifyPageVisibility('Playwright_UI');
+        await profilePage.profilePageComponent.verifyPageVisibility();
     });
 });
 
@@ -43,7 +43,21 @@ test('Test 3: Verify navigation of Playwright_UI link', async ({ pageManager }, 
     });
 });
 
-test('Test 4: Verify navigation of Jest_TCP link', async ({ pageManager }, testInfo) => {
+test('Test 4: Verify navigation of BrowserStack link', async ({ pageManager }, testInfo) => {
+    const { profilePage } = pageManager;
+    const browserName = testInfo.project.use.browserName;
+    console.log(`[${browserName}] > ${testInfo.title}`);
+
+    await test.step('Step 1: Go to the site', async () => {
+        await profilePage.goTo();
+    });
+
+    await test.step('Step 2: Verify navigation of BrowserStack link', async () => {
+        await profilePage.profilePageComponent.verifyLinkNavigation('BrowserStack');
+    });
+});
+
+test('Test 5: Verify navigation of Jest_TCP link', async ({ pageManager }, testInfo) => {
     const { profilePage } = pageManager;
     const browserName = testInfo.project.use.browserName;
     console.log(`[${browserName}] > ${testInfo.title}`);
@@ -57,7 +71,7 @@ test('Test 4: Verify navigation of Jest_TCP link', async ({ pageManager }, testI
     });
 });
 
-test('Test 5: Verify navigation of Publication link', async ({ pageManager }, testInfo) => {
+test('Test 6: Verify navigation of Publication link', async ({ pageManager }, testInfo) => {
     const { profilePage } = pageManager;
     const browserName = testInfo.project.use.browserName;
     console.log(`[${browserName}] > ${testInfo.title}`);
@@ -71,7 +85,7 @@ test('Test 5: Verify navigation of Publication link', async ({ pageManager }, te
     });
 });
 
-test('Test 6: Verify navigation of LinkedIn link', async ({ pageManager }, testInfo) => {
+test('Test 7: Verify navigation of LinkedIn link', async ({ pageManager }, testInfo) => {
     const { profilePage } = pageManager;
     const browserName = testInfo.project.use.browserName;
     console.log(`[${browserName}] > ${testInfo.title}`);
@@ -85,7 +99,7 @@ test('Test 6: Verify navigation of LinkedIn link', async ({ pageManager }, testI
     });
 });
 
-test('Test 7: Verify navigation of GitHub link', async ({ pageManager }, testInfo) => {
+test('Test 8: Verify navigation of GitHub link', async ({ pageManager }, testInfo) => {
     const { profilePage } = pageManager;
     const browserName = testInfo.project.use.browserName;
     console.log(`[${browserName}] > ${testInfo.title}`);
