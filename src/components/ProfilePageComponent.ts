@@ -1,11 +1,13 @@
 import { Page, Locator, expect } from '@playwright/test';
 import { BaseComponent } from './BaseComponent';
 import { readPDF } from '../shared/helpers/fileReader';
+import { aiLocator } from '../shared/utils/ai.helper';
 import fs from 'fs';
 
 export type links =
     | 'Résumé'
     | 'Playwright_UI'
+    | 'BrowserStack'
     | 'Jest_TCP'
     | 'Applications of Steganography'
     | 'LinkedIn'
@@ -20,7 +22,7 @@ export class ProfilePageComponent extends BaseComponent {
         super(page);
         this.page = page;
         this.logo = this.page.getByRole('img', { name: 'Logo' });
-        this.aboutMeSection = this.page.locator('div').filter({ hasText: 'Senior Software Development' });
+        this.aboutMeSection = this.page.locator('div').filter({ hasText: 'Senior Software Engineer (SDET)' });
     }
 
     public async verifyPageVisibility(): Promise<void> {
@@ -54,10 +56,11 @@ export class ProfilePageComponent extends BaseComponent {
             await expect(await this.page.getByText(text).first()).toBeVisible();
     }
 
-    private async verifyPageLinksVisibility(count = 7): Promise<void> {
+    private async verifyPageLinksVisibility(count = 8): Promise<void> {
         const links: string[] = [
            'Résumé',
            'Playwright_UI',
+           'BrowserStack',
            'Jest_TCP',
            'Applications of Steganography',
            'LinkedIn',
@@ -100,6 +103,9 @@ export class ProfilePageComponent extends BaseComponent {
                 await expect(newPage.locator('#repository-container-header').getByRole('link', { name: 'playwright-sdet' }))
                 .toBeVisible();
                 break;
+            case 'BrowserStack':
+                await expect(newPage.url()).toContain('https://automation.browserstack.com/projects/BrowserStack+playwright-sdet/builds');
+                break;
             case 'Jest_TCP':
                 await expect(newPage.url()).toContain('https://github.com/');
                 await expect(newPage.locator('#repository-container-header').getByRole('link', { name: 'jest-sdet' }))
@@ -107,9 +113,8 @@ export class ProfilePageComponent extends BaseComponent {
                 break;
             case 'Applications of Steganography':
                 await expect(newPage.url()).toContain('https://scholarworks.calstate.edu/');
-//                 await expect(newPage.locator('.csu-campus-logo')
-//                 .or(newPage.getByLabel('header').getByRole('link', { name: 'California State University' })).first())
-//                 .toBeVisible();
+                const logo = await aiLocator(newPage, 'img', 'California State University, Northridge');
+                await expect(logo).toBeVisible();
                 break;
             case 'LinkedIn':
                 await expect(newPage.url()).toContain('https://www.linkedin.com/');
