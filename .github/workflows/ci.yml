@@ -13,45 +13,50 @@ permissions:
 
 jobs:
   smoke-test:
-    name: smoke-test (${{ matrix.platform }})
+    name: Smoke Test (${{ matrix.platform }})
     runs-on: ubuntu-latest
     timeout-minutes: 60
 
     strategy:
       matrix:
         platform:
-          - linux-amd64
-          - linux-arm64
+          - linux/amd64
+          - linux/arm64
 
     steps:
       - uses: actions/checkout@v4
 
-      # Enables ARM emulation on amd64 runner
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Build Playwright image (${{ matrix.platform }})
+      - name: Build Playwright image
         run: |
+          PLATFORM="${{ matrix.platform }}"
+          TAG="${PLATFORM//\//-}"
+
           docker buildx build \
-            --platform ${{ matrix.platform }} \
+            --platform "$PLATFORM" \
             --load \
-            -t playwright-sdet:${{ matrix.platform }} \
+            -t playwright-sdet:$TAG \
             .
 
-      - name: Run smoke tests (${{ matrix.platform }})
+      - name: Run smoke tests
         run: |
+          PLATFORM="${{ matrix.platform }}"
+          TAG="${PLATFORM//\//-}"
+
           docker run --rm \
             -v ${{ github.workspace }}:/app \
             -w /app \
             -e PW_HEADLESS=1 \
-            playwright-sdet:${{ matrix.platform }} \
+            playwright-sdet:$TAG \
             npx playwright test --grep @smoke
 
   regression-test:
-    name: regression-test (${{ matrix.platform }})
+    name: Regression Test (${{ matrix.platform }})
     runs-on: ubuntu-latest
     timeout-minutes: 60
     needs: smoke-test
@@ -59,8 +64,8 @@ jobs:
     strategy:
       matrix:
         platform:
-          - linux-amd64
-          - linux-arm64
+          - linux/amd64
+          - linux/arm64
 
     steps:
       - uses: actions/checkout@v4
@@ -71,19 +76,25 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Build Playwright image (${{ matrix.platform }})
+      - name: Build Playwright image
         run: |
+          PLATFORM="${{ matrix.platform }}"
+          TAG="${PLATFORM//\//-}"
+
           docker buildx build \
-            --platform ${{ matrix.platform }} \
+            --platform "$PLATFORM" \
             --load \
-            -t playwright-sdet:${{ matrix.platform }} \
+            -t playwright-sdet:$TAG \
             .
 
-      - name: Run regression tests (${{ matrix.platform }})
+      - name: Run regression tests
         run: |
+          PLATFORM="${{ matrix.platform }}"
+          TAG="${PLATFORM//\//-}"
+
           docker run --rm \
             -v ${{ github.workspace }}:/app \
             -w /app \
             -e PW_HEADLESS=1 \
-            playwright-sdet:${{ matrix.platform }} \
+            playwright-sdet:$TAG \
             npx playwright test
