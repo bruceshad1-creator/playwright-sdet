@@ -49,9 +49,6 @@ jobs:
           TAG="${PLATFORM//\//-}"
 
           docker run --rm \
-            -v ${{ github.workspace }}:/app \
-            -w /app \
-            -e PW_HEADLESS=1 \
             playwright-sdet:$TAG \
             npx playwright test --grep @smoke
 
@@ -93,8 +90,5 @@ jobs:
           TAG="${PLATFORM//\//-}"
 
           docker run --rm \
-            -v ${{ github.workspace }}:/app \
-            -w /app \
-            -e PW_HEADLESS=1 \
             playwright-sdet:$TAG \
             npx playwright test
