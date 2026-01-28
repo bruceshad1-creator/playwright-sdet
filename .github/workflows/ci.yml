@@ -13,82 +13,95 @@ permissions:
 
 jobs:
   smoke-test:
-    name: Smoke Test (${{ matrix.platform }})
+    name: Smoke (${{ matrix.platform }} | ${{ matrix.project }})
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    timeout-minutes: 90
 
     strategy:
+      fail-fast: false
       matrix:
         platform:
-          - linux/amd64
-          - linux/arm64
+          - linux/arm64       # Apple Silicon only
+        project:
+          - chromium          # Chromium only for smoke
 
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up QEMU
+      - name: Set up QEMU for multi-arch
         uses: docker/setup-qemu-action@v3
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Build Playwright image
+      - name: Build Playwright Docker image
         run: |
           PLATFORM="${{ matrix.platform }}"
           TAG="${PLATFORM//\//-}"
-
           docker buildx build \
             --platform "$PLATFORM" \
             --load \
-            -t playwright-sdet:$TAG \
-            .
+            -t playwright-sdet:$TAG .
 
       - name: Run smoke tests
         run: |
           PLATFORM="${{ matrix.platform }}"
           TAG="${PLATFORM//\//-}"
-
           docker run --rm \
+            -v ${{ github.workspace }}/downloads:/app/downloads \
+            -v ${{ github.workspace }}:/app \
+            -w /app \
+            -e CI=true \
+            -e PW_HEADLESS=1 \
             playwright-sdet:$TAG \
-            npx playwright test --grep @smoke
+            npx playwright test --project="${{ matrix.project }}" --grep @smoke
 
   regression-test:
-    name: Regression Test (${{ matrix.platform }})
+    name: Regression (${{ matrix.platform }} | ${{ matrix.project }})
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    timeout-minutes: 120
     needs: smoke-test
 
     strategy:
+      fail-fast: false
       matrix:
         platform:
           - linux/amd64
           - linux/arm64
+        project:
+          - chromium
+          - firefox
+          - webkit
+          - "iPhone 15 Pro"
+          - "iPad Pro 12.9"
 
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up QEMU
+      - name: Set up QEMU for multi-arch
         uses: docker/setup-qemu-action@v3
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Build Playwright image
+      - name: Build Playwright Docker image
         run: |
           PLATFORM="${{ matrix.platform }}"
           TAG="${PLATFORM//\//-}"
-
           docker buildx build \
             --platform "$PLATFORM" \
             --load \
-            -t playwright-sdet:$TAG \
-            .
+            -t playwright-sdet:$TAG .
 
       - name: Run regression tests
         run: |
           PLATFORM="${{ matrix.platform }}"
           TAG="${PLATFORM//\//-}"
-
           docker run --rm \
+            -v ${{ github.workspace }}/downloads:/app/downloads \
+            -v ${{ github.workspace }}:/app \
+            -w /app \
+            -e CI=true \
+            -e PW_HEADLESS=1 \
             playwright-sdet:$TAG \
-            npx playwright test
+            npx playwright test --project="${{ matrix.project }}"
