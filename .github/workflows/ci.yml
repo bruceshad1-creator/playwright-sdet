@@ -21,9 +21,9 @@ jobs:
       fail-fast: false
       matrix:
         platform:
-          - linux/arm64       # Apple Silicon only
+          - linux/amd64
         project:
-          - chromium          # Chromium only for smoke
+          - chromium
 
     steps:
       - uses: actions/checkout@v4
