@@ -11,93 +11,110 @@ on:
 permissions:
   contents: read
 
-jobs:
-  smoke-test:
-    name: Smoke (${{ matrix.platform }} | ${{ matrix.project }})
-    runs-on: ubuntu-latest
-    timeout-minutes: 90
+env:
+  USE_DOCKER: true # 🔁 false = native only
 
-    strategy:
-      fail-fast: false
-      matrix:
-        platform:
-          - linux/amd64
-        project:
-          - chromium
+jobs:
+  # ============================================================
+  # SMOKE — Native CI ONLY — Chrome ONLY
+  # ============================================================
+  smoke-test:
+    name: Smoke (Native | Chrome)
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
 
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up QEMU for multi-arch
-        uses: docker/setup-qemu-action@v3
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Build Playwright Docker image
+      - name: Install deps
         run: |
-          PLATFORM="${{ matrix.platform }}"
-          TAG="${PLATFORM//\//-}"
-          docker buildx build \
-            --platform "$PLATFORM" \
-            --load \
-            -t playwright-sdet:$TAG .
+          npm ci
+          npx playwright install chromium
 
       - name: Run smoke tests
         run: |
-          PLATFORM="${{ matrix.platform }}"
-          TAG="${PLATFORM//\//-}"
-          
-          docker run --rm \
-            -e CI=true \
-            -e PW_HEADLESS=1 \
-            -v ${{ github.workspace }}/downloads:/app/downloads \
-            playwright-sdet:$TAG \
-            npx playwright test --grep @smoke
+          npx playwright test --project=Chrome --grep @smoke
 
+  # ============================================================
+  # REGRESSION — Native + Docker
+  # ============================================================
   regression-test:
-    name: Regression (${{ matrix.platform }} | ${{ matrix.project }})
+    name: Regression (${{ matrix.mode }} | ${{ matrix.project }})
     runs-on: ubuntu-latest
     timeout-minutes: 120
+    needs: smoke-test
 
     strategy:
       fail-fast: false
       matrix:
-        platform:
-          - linux/amd64
-        project:
-          - chromium
-          - firefox
-          - webkit
-          - "iPhone 15 Pro"
-          - "iPad Pro 12.9"
+        include:
+          # -------- Native CI (desktop only) --------
+          - mode: native
+            project: Chrome
+          - mode: native
+            project: Firefox
+
+          # -------- Docker CI (webkit + mobile) --------
+          - mode: docker
+            project: Safari
+          - mode: docker
+            project: iPhone 15
+          - mode: docker
+            project: iPad Pro 12.9
 
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up QEMU for multi-arch
+      # ---------------------------
+      # Native regression
+      # ---------------------------
+      - name: Setup Node (native)
+        if: matrix.mode == 'native'
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install deps (native)
+        if: matrix.mode == 'native'
+        run: |
+          npm ci
+          npx playwright install --with-deps
+
+      - name: Run regression (native)
+        if: matrix.mode == 'native'
+        run: |
+          npx playwright test --project="${{ matrix.project }}"
+
+      # ---------------------------
+      # Docker regression
+      # ---------------------------
+      - name: Set up QEMU
+        if: matrix.mode == 'docker'
         uses: docker/setup-qemu-action@v3
 
       - name: Set up Docker Buildx
+        if: matrix.mode == 'docker'
         uses: docker/setup-buildx-action@v3
 
-      - name: Build Playwright Docker image
+      - name: Build Docker image
+        if: matrix.mode == 'docker'
         run: |
-          PLATFORM="${{ matrix.platform }}"
-          TAG="${PLATFORM//\//-}"
           docker buildx build \
-            --platform "$PLATFORM" \
+            --platform linux/amd64 \
             --load \
-            -t playwright-sdet:$TAG .
+            -t playwright-sdet:ci .
 
-      - name: Run regression tests
+      - name: Run regression (Docker)
+        if: matrix.mode == 'docker'
         run: |
-          PLATFORM="${{ matrix.platform }}"
-          TAG="${PLATFORM//\//-}"
-          
           docker run --rm \
             -e CI=true \
             -e PW_HEADLESS=1 \
             -v ${{ github.workspace }}/downloads:/app/downloads \
-            playwright-sdet:$TAG \
-            npx playwright test
+            playwright-sdet:ci \
+            npx playwright test --project="${{ matrix.project }}"
