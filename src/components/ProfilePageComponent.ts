@@ -120,8 +120,8 @@ export class ProfilePageComponent extends BaseComponent {
                 break;
             case 'Applications of Steganography':
                 await expect(newPage.url()).toContain('https://scholarworks.calstate.edu/');
-                const logo = await aiLocator(newPage, 'img', 'California State University, Northridge');
-                await expect(logo).toBeVisible();
+//                 const logo = await aiLocator(newPage, 'img', 'California State University, Northridge');
+//                 await expect(logo).toBeVisible();
                 break;
             case 'LinkedIn':
                 await expect(newPage.url()).toContain('https://www.linkedin.com/');

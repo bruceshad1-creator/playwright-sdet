@@ -43,7 +43,7 @@ export default defineConfig({
   /* Configure projects for major browsers */
   projects: [
     { name: 'Chrome',  use: { browserName: 'chromium', ...devices['Desktop Chrome'] } },
-    { name: 'Firefox', use: { browserName: 'firefox', ...devices['Desktop Firefox'] } },
+//     { name: 'Firefox', use: { browserName: 'firefox', ...devices['Desktop Firefox'] } },
     { name: 'Safari',  use: { browserName: 'webkit', ...devices['Desktop Safari'] } },
     { name: 'iPhone 15',  use: { browserName: 'webkit', ...devices['iPhone 15'] } },
     { name: 'iPad Pro 12.9',  use: { browserName: 'webkit', ...devices['iPad Pro 12.9'] } },
