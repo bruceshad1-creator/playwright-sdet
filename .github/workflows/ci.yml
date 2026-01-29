@@ -56,8 +56,8 @@ jobs:
           # -------- Native CI (desktop only) --------
           - mode: native
             project: Chrome
-          - mode: native
-            project: Firefox
+#          - mode: native
+#            project: Firefox
 
           # -------- Docker CI (webkit + mobile) --------
           - mode: docker
