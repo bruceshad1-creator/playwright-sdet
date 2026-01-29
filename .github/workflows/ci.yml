@@ -53,7 +53,7 @@ jobs:
             -e PW_HEADLESS=1 \
             -v ${{ github.workspace }}/downloads:/app/downloads \
             playwright-sdet:$TAG \
-            npx playwright test --project="${{ matrix.project }}" --grep @smoke
+            npx playwright test --grep @smoke
 
   regression-test:
     name: Regression (${{ matrix.platform }} | ${{ matrix.project }})
@@ -102,4 +102,4 @@ jobs:
             -e PW_HEADLESS=1 \
             -v ${{ github.workspace }}/downloads:/app/downloads \
             playwright-sdet:$TAG \
-            npx playwright test --project="${{ matrix.project }}"
+            npx playwright test
