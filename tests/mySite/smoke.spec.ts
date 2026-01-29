@@ -2,7 +2,7 @@ import { test } from '@page-manager-fixture';
 
 test('@smoke Test 1: Verify visibility of About Me section', async ({ pageManager }, testInfo) => {
     const { profilePage } = pageManager;
-    const browserName = testInfo.project.use.browserName;
+    const browserName = testInfo.project.name;
     console.log(`[${browserName}] > ${testInfo.title}`);
 
     await test.step('Step 1: Go to the site', async () => {

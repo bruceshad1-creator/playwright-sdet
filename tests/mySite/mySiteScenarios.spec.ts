@@ -3,7 +3,7 @@ import { test } from '@page-manager-fixture';
 test.setTimeout(180000);
 test('Test 1: Verify visibility of basic elements', async ({ pageManager }, testInfo) => {
     const { profilePage } = pageManager;
-    const browserName = testInfo.project.use.browserName;
+    const browserName = testInfo.project.name;
     console.log(`[${browserName}] > ${testInfo.title}`);
 
     await test.step('Step 1: Go to the site', async () => {
@@ -17,7 +17,7 @@ test('Test 1: Verify visibility of basic elements', async ({ pageManager }, test
 
 test('Test 2: Verify Résumé download', async ({ pageManager }, testInfo) => {
     const { profilePage } = pageManager;
-    const browserName = testInfo.project.use.browserName;
+    const browserName = testInfo.project.name;
     console.log(`[${browserName}] > ${testInfo.title}`);
 
     await test.step('Step 1: Go to the site', async () => {
@@ -31,7 +31,7 @@ test('Test 2: Verify Résumé download', async ({ pageManager }, testInfo) => {
 
 test('Test 3: Verify navigation of Playwright_UI link', async ({ pageManager }, testInfo) => {
     const { profilePage } = pageManager;
-    const browserName = testInfo.project.use.browserName;
+    const browserName = testInfo.project.name;
     console.log(`[${browserName}] > ${testInfo.title}`);
 
     await test.step('Step 1: Go to the site', async () => {
@@ -45,7 +45,7 @@ test('Test 3: Verify navigation of Playwright_UI link', async ({ pageManager }, 
 
 test('Test 4: Verify navigation of BrowserStack link', async ({ pageManager }, testInfo) => {
     const { profilePage } = pageManager;
-    const browserName = testInfo.project.use.browserName;
+    const browserName = testInfo.project.name;
     console.log(`[${browserName}] > ${testInfo.title}`);
 
     await test.step('Step 1: Go to the site', async () => {
@@ -59,7 +59,7 @@ test('Test 4: Verify navigation of BrowserStack link', async ({ pageManager }, t
 
 test('Test 5: Verify navigation of Jest_TCP link', async ({ pageManager }, testInfo) => {
     const { profilePage } = pageManager;
-    const browserName = testInfo.project.use.browserName;
+    const browserName = testInfo.project.name;
     console.log(`[${browserName}] > ${testInfo.title}`);
 
     await test.step('Step 1: Go to the site', async () => {
@@ -73,7 +73,7 @@ test('Test 5: Verify navigation of Jest_TCP link', async ({ pageManager }, testI
 
 test('Test 6: Verify navigation of Publication link', async ({ pageManager }, testInfo) => {
     const { profilePage } = pageManager;
-    const browserName = testInfo.project.use.browserName;
+    const browserName = testInfo.project.name;
     console.log(`[${browserName}] > ${testInfo.title}`);
 
     await test.step('Step 1: Go to the site', async () => {
@@ -87,7 +87,7 @@ test('Test 6: Verify navigation of Publication link', async ({ pageManager }, te
 
 test('Test 7: Verify navigation of LinkedIn link', async ({ pageManager }, testInfo) => {
     const { profilePage } = pageManager;
-    const browserName = testInfo.project.use.browserName;
+    const browserName = testInfo.project.name;
     console.log(`[${browserName}] > ${testInfo.title}`);
 
     await test.step('Step 1: Go to the site', async () => {
@@ -101,7 +101,7 @@ test('Test 7: Verify navigation of LinkedIn link', async ({ pageManager }, testI
 
 test('Test 8: Verify navigation of GitHub link', async ({ pageManager }, testInfo) => {
     const { profilePage } = pageManager;
-    const browserName = testInfo.project.use.browserName;
+    const browserName = testInfo.project.name;
     console.log(`[${browserName}] > ${testInfo.title}`);
 
     await test.step('Step 1: Go to the site', async () => {
