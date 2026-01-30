@@ -11,6 +11,10 @@ import { defineConfig, devices } from '@playwright/test';
 /**
  * See https://playwright.dev/docs/test-configuration.
  */
+
+// To check for report.html
+const isDocker = process.env.USE_DOCKER === 'true';
+
 export default defineConfig({
   testDir: './tests',
   /* Run tests in files in parallel */
@@ -22,7 +26,21 @@ export default defineConfig({
   /* Opt out of parallel tests on CI. */
   workers: process.env.CI ? 20 : 20,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
-  reporter: 'html',
+  outputDir: isDocker
+      ? '/app/downloads/test-results'
+      : 'downloads/test-results',
+
+  reporter: [
+    ['list'],
+    ['html',
+      {
+        outputFolder: isDocker
+          ? '/app/downloads/html-report'
+          : 'downloads/html-report',
+        open: 'never',
+      },
+    ],
+  ],
   /* Shared settings for all the projects. See https://playwright.dev/docs/api/class-testoptions. */
   timeout: 60000, // 1 minute for all tests
   use: {
@@ -36,12 +54,10 @@ export default defineConfig({
     // Capture screenshot after each test failure.
     screenshot: 'only-on-failure',
     // Record trace only when retrying a test for the first time.
-    trace: 'on-first-retry',
+    trace: 'retain-on-failure',
     // Record video only when retrying a test for the first time.
-    video: 'on-first-retry'
+    video: 'retain-on-failure'
   },
-//   outputDir: '/app/downloads', // <- important for Docker mount
-//   reporter: [['list'], ['html', { outputFolder: '/app/downloads/html-report' }]],
   /* Configure projects for major browsers */
   projects: [
     { name: 'Chrome',  use: { browserName: 'chromium', ...devices['Desktop Chrome'] } },

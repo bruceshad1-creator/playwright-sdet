@@ -11,9 +11,6 @@ on:
 permissions:
   contents: read
 
-env:
-  USE_DOCKER: true # 🔁 false = native only
-
 jobs:
   # ============================================================
   # SMOKE — Native CI ONLY — Chrome ONLY
@@ -113,6 +110,7 @@ jobs:
         if: matrix.mode == 'docker'
         run: |
           docker run --rm \
+            -e USE_DOCKER=true \
             -e CI=true \
             -e PW_HEADLESS=1 \
             -v ${{ github.workspace }}/downloads:/app/downloads \

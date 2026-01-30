@@ -6,9 +6,10 @@ import fs from 'fs';
 
 export type links =
     | 'Résumé'
-    | 'Playwright_UI'
+    | 'Playwright_SDET'
+    | 'CI + Docker'
     | 'BrowserStack'
-    | 'Jest_TCP'
+    | 'Jest_SDET'
     | 'Applications of Steganography'
     | 'LinkedIn'
     | 'GitHub'
@@ -63,12 +64,13 @@ export class ProfilePageComponent extends BaseComponent {
             await expect(await this.page.getByText(text).first()).toBeVisible();
     }
 
-    private async verifyPageLinksVisibility(count = 8): Promise<void> {
+    private async verifyPageLinksVisibility(count = 9): Promise<void> {
         const links: string[] = [
            'Résumé',
-           'Playwright_UI',
+           'Playwright_SDET',
+           'CI + Docker',
            'BrowserStack',
-           'Jest_TCP',
+           'Jest_SDET',
            'Applications of Steganography',
            'LinkedIn',
            'GitHub'
@@ -105,15 +107,18 @@ export class ProfilePageComponent extends BaseComponent {
         await newPage.waitForLoadState();
 
         switch (link) {
-            case 'Playwright_UI':
+            case 'Playwright_SDET':
                 await expect(newPage.url()).toContain('https://github.com/');
                 await expect(newPage.locator('#repository-container-header').getByRole('link', { name: 'playwright-sdet' }))
                 .toBeVisible();
                 break;
+            case 'CI + Docker':
+                await expect(newPage.url()).toContain('https://github.com/bruceshad1-creator/playwright-sdet/actions/runs/21466022541');
+                break;
             case 'BrowserStack':
                 await expect(newPage.url()).toContain('https://automation.browserstack.com/projects/BrowserStack+playwright-sdet/builds');
                 break;
-            case 'Jest_TCP':
+            case 'Jest_SDET':
                 await expect(newPage.url()).toContain('https://github.com/');
                 await expect(newPage.locator('#repository-container-header').getByRole('link', { name: 'jest-sdet' }))
                 .toBeVisible();
