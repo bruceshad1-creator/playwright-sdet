@@ -11,9 +11,6 @@ on:
 permissions:
   contents: read
 
-env:
-  USE_DOCKER: true # 🔁 false = native only
-
 jobs:
   # ============================================================
   # SMOKE — Native CI ONLY — Chrome ONLY
