@@ -40,8 +40,8 @@ export default defineConfig({
     // Record video only when retrying a test for the first time.
     video: 'on-first-retry'
   },
-  outputDir: '/app/downloads', // <- important for Docker mount
-  reporter: [['list'], ['html', { outputFolder: '/app/downloads/html-report' }]],
+//   outputDir: '/app/downloads', // <- important for Docker mount
+//   reporter: [['list'], ['html', { outputFolder: '/app/downloads/html-report' }]],
   /* Configure projects for major browsers */
   projects: [
     { name: 'Chrome',  use: { browserName: 'chromium', ...devices['Desktop Chrome'] } },
