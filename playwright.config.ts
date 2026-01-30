@@ -13,7 +13,7 @@ import { defineConfig, devices } from '@playwright/test';
  */
 
 // To check for report.html
-const isDocker = process.env.CI && process.env.USE_DOCKER === 'true';
+const isDocker = process.env.USE_DOCKER === 'true';
 
 export default defineConfig({
   testDir: './tests',
