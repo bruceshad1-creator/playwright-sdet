@@ -113,6 +113,7 @@ jobs:
         if: matrix.mode == 'docker'
         run: |
           docker run --rm \
+            -e USE_DOCKER=true \
             -e CI=true \
             -e PW_HEADLESS=1 \
             -v ${{ github.workspace }}/downloads:/app/downloads \
