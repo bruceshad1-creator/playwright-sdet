@@ -127,3 +127,17 @@ test('Test 9: Verify navigation of GitHub link', async ({ pageManager }, testInf
     });
 });
 
+test('Test 10: Verify mocked LinkedIn', async ({ pageManager }, testInfo) => {
+    const { profilePage } = pageManager;
+    const browserName = testInfo.project.name;
+    console.log(`[${browserName}] > ${testInfo.title}`);
+
+    await test.step('Step 1: Go to the site', async () => {
+        await profilePage.goTo();
+    });
+
+    await test.step('Step 2: Verify mocked LinkedIn', async () => {
+        await profilePage.profilePageComponent.mockLinkedIn();
+    });
+});
+
