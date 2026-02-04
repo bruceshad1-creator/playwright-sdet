@@ -144,7 +144,10 @@ export class ProfilePageComponent extends BaseComponent {
     }
 
     public async mockLinkedIn() {
-      const img = fs.readFileSync('data/LI-Logo.png', 'base64');
+      const url = 'https://www.linkedin.com/in/bruce-shad-3b277416/';
+      const img1 = fs.readFileSync('data/profile.png', 'base64');
+      const img2 = fs.readFileSync('data/LI-Logo.png', 'base64');
+
       await this.page.context().route('**linkedin.com/**', route =>
         route.fulfill({
           status: 200,
@@ -161,8 +164,9 @@ export class ProfilePageComponent extends BaseComponent {
                     background:#f4f6f8;
                   ">
                     <div style="text-align:center;">
+                      <img width="200" src="data:image/png;base64,${img1}"/>
                       <h3>LinkedIn Mocked!</h3>
-                      <img width="500" src="data:image/png;base64,${img}"/>
+                      <img width="500" src="data:image/png;base64,${img2}"/>
                       <h1>Bruce Shad</h1>
                       <h3>Senior Software Development Engineer in Test (SDET)</h3>
                     </div>
@@ -171,13 +175,15 @@ export class ProfilePageComponent extends BaseComponent {
               `
         })
       );
+
       const popupPromise = this.page.waitForEvent('popup');
       await this.page.getByRole('link', { name: 'LinkedIn' }).click();
       const popup = await popupPromise;
 
-      await expect(popup).toHaveURL('https://www.linkedin.com/in/bruce-shad-3b277416/');
+      await expect(popup).toHaveURL(url);
+      await expect(popup.getByRole('img').first()).toBeVisible();
       await expect(popup.getByText('LinkedIn Mocked!')).toBeVisible();
-      await expect(popup.getByRole('img')).toBeVisible();
+      await expect(popup.getByRole('img').nth(1)).toBeVisible();
       await expect(popup.locator('h1')).toHaveText('Bruce Shad');
       await expect(popup.getByText('Senior Software Development Engineer in Test (SDET)')).toBeVisible();
     }
