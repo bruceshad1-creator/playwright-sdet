@@ -2,6 +2,7 @@ import { Page, Locator, expect } from '@playwright/test';
 import { BaseComponent } from './BaseComponent';
 import { readPDF } from '../shared/helpers/fileReader';
 import { aiLocator } from '../shared/utils/ai.helper';
+import { mockPage } from '../shared/utils/mockServices/mock';
 import fs from 'fs';
 
 export type links =
@@ -143,48 +144,24 @@ export class ProfilePageComponent extends BaseComponent {
         }
     }
 
-    public async mockLinkedIn() {
-      const url = 'https://www.linkedin.com/in/bruce-shad-3b277416/';
-      const img1 = fs.readFileSync('data/profile.png', 'base64');
-      const img2 = fs.readFileSync('data/LI-Logo.png', 'base64');
+    public async mock(pg: string) {
+        let url;
+        switch (pg) {
+            case 'LinkedIn':
+                url = 'https://www.linkedin.com/in/bruce-shad-3b277416/';
+                break;
+            case 'GitHub':
+                url = 'https://github.com/bruceshad1-creator';
+                break;
+        }
 
-      await this.page.context().route('**linkedin.com/**', route =>
-        route.fulfill({
-          status: 200,
-          contentType: 'text/html',
-          body: `
-                <html>
-                  <body style="
-                    margin:0;
-                    height:100vh;
-                    display:flex;
-                    justify-content:center;
-                    align-items:center;
-                    font-family: Arial, sans-serif;
-                    background:#f4f6f8;
-                  ">
-                    <div style="text-align:center;">
-                      <img width="200" src="data:image/png;base64,${img1}"/>
-                      <h3>LinkedIn Mocked!</h3>
-                      <img width="500" src="data:image/png;base64,${img2}"/>
-                      <h1>Bruce Shad</h1>
-                      <h3>Senior Software Development Engineer in Test (SDET)</h3>
-                    </div>
-                  </body>
-                </html>
-              `
-        })
-      );
+          const popup = await mockPage(this.page, pg);
 
-      const popupPromise = this.page.waitForEvent('popup');
-      await this.page.getByRole('link', { name: 'LinkedIn' }).click();
-      const popup = await popupPromise;
-
-      await expect(popup).toHaveURL(url);
-      await expect(popup.getByRole('img').first()).toBeVisible();
-      await expect(popup.getByText('LinkedIn Mocked!')).toBeVisible();
-      await expect(popup.getByRole('img').nth(1)).toBeVisible();
-      await expect(popup.locator('h1')).toHaveText('Bruce Shad');
-      await expect(popup.getByText('Senior Software Development Engineer in Test (SDET)')).toBeVisible();
+          await expect(popup).toHaveURL(url);
+          await expect(popup.getByRole('img').first()).toBeVisible();
+          await expect(popup.getByText('LinkedIn Mocked!')).toBeVisible();
+          await expect(popup.getByRole('img').nth(1)).toBeVisible();
+          await expect(popup.locator('h1')).toHaveText('Bruce Shad');
+          await expect(popup.getByText('Senior Software Development Engineer in Test (SDET)')).toBeVisible();
     }
 }

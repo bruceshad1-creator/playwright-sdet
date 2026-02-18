@@ -137,7 +137,6 @@ test('Test 10: Verify mocked LinkedIn', async ({ pageManager }, testInfo) => {
     });
 
     await test.step('Step 2: Verify mocked LinkedIn', async () => {
-        await profilePage.profilePageComponent.mockLinkedIn();
+        await profilePage.profilePageComponent.mock('LinkedIn');
     });
 });
-
