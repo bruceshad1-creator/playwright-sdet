@@ -27,6 +27,7 @@ export default [
     plugins: {
       '@typescript-eslint': tseslint,
       playwright,
+      ["tsdoc"],
     },
     rules: {
       // Playwright best practices
@@ -36,6 +37,7 @@ export default [
       // TS rules (test-friendly)
       '@typescript-eslint/no-explicit-any': 'off',
       '@typescript-eslint/no-non-null-assertion': 'off',
+      "tsdoc/syntax": "warn",
     },
   },
 ];
